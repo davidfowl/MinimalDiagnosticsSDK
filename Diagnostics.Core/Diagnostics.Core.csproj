@@ -9,4 +9,18 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0" />
   </ItemGroup>
 
+  <Target Name="PrepareLayout" AfterTargets="Build">
+    <PropertyGroup>
+      <AdditionalDepsPath>$(TargetDir)additionalDeps\shared\Microsoft.AspNetCore.App\2.1.0</AdditionalDepsPath>
+      <StorePath>$(TargetDir)store\x64\netcoreapp2.1\Diagnostics.Core\1.0.0</StorePath>
+      <StoreArtifactsPath>$(TargetDir)store\x64\netcoreapp2.1\artifact.xml</StoreArtifactsPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <DepsFiles Include="$(TargetDir)*.deps.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DepsFiles)" DestinationFolder="$(AdditionalDepsPath)"></Copy>
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(StorePath)"></Copy>
+    <WriteLinesToFile File="$(StoreArtifactsPath)" Lines="&lt;StoreArtifacts&gt;&lt;Package Id=&quot;Diagnostics.Core&quot; Version=&quot;1.0.0&quot; /&gt;&lt;/StoreArtifacts&gt;"></WriteLinesToFile>
+  </Target>
+
 </Project>

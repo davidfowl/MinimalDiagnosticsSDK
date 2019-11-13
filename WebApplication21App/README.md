@@ -8,7 +8,8 @@
           "launchBrowser": true,
           "launchUrl": "api/values",
           "environmentVariables": {
-            "DIAGNOSTICS_PATH": "C:\\Users\\david\\source\\repos\\MinimalDiagnosticsSDK\\Diagnostics.Core\\bin\\Debug\\netcoreapp2.1\\Diagnostics.Core.dll",
+            "DOTNET_ADDITIONAL_DEPS": "C:\\Users\\david\\source\\repos\\MinimalDiagnosticsSDK\\Diagnostics.Core\\bin\\Debug\\netcoreapp2.1\\additionalDeps",
+            "DOTNET_SHARED_STORE": "C:\\Users\\david\\source\\repos\\MinimalDiagnosticsSDK\\Diagnostics.Core\\bin\\Debug\\netcoreapp2.1\\store",
             "ASPNETCORE_ENVIRONMENT": "Development",
             "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Diagnostics.Core"
           }
@@ -16,9 +17,9 @@
         "WebApplication21App": {
           "commandName": "Project",
           "launchBrowser": true,
-          "launchUrl": "api/values",
           "environmentVariables": {
-            "DIAGNOSTICS_PATH": "C:\\Users\\david\\source\\repos\\MinimalDiagnosticsSDK\\Diagnostics.Core\\bin\\Debug\\netcoreapp2.1\\Diagnostics.Core.dll",
+            "DOTNET_ADDITIONAL_DEPS": "C:\\Users\\david\\source\\repos\\MinimalDiagnosticsSDK\\Diagnostics.Core\\bin\\Debug\\netcoreapp2.1\\additionalDeps",
+            "DOTNET_SHARED_STORE": "C:\\Users\\david\\source\\repos\\MinimalDiagnosticsSDK\\Diagnostics.Core\\bin\\Debug\\netcoreapp2.1\\store",
             "ASPNETCORE_ENVIRONMENT": "Development",
             "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Diagnostics.Core"
           },
