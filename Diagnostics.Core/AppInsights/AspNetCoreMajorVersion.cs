@@ -13,16 +13,16 @@ namespace Microsoft.ApplicationInsights.AspNetCore.Implementation
         /// <summary>
         /// .NET Core Version 1.0
         /// </summary>
-        One,
+        One = 1,
 
         /// <summary>
         /// .NET Core Version 2.0
         /// </summary>
-        Two,
+        Two = 2,
 
         /// <summary>
         /// .NET Core Version 3.0
         /// </summary>
-        Three,
+        Three = 3
     }
 }

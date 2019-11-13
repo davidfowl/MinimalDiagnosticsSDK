@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.ApplicationInsights
 {
@@ -9,7 +10,7 @@ namespace Microsoft.ApplicationInsights
     {
         public string Id { get; internal set; }
         public string Name { get; internal set; }
-        public IDictionary<string, object> Properties { get; set; } = new Dictionary<string, object>();
+        public IDictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
         public TelemetryContext Context { get; set; } = new TelemetryContext();
 
         public class TelemetryContext
@@ -57,13 +58,26 @@ namespace Microsoft.ApplicationInsights
 
     internal class ExceptionTelemetry : Telemetry
     {
-        private Exception exception;
-
         public ExceptionTelemetry(Exception exception)
         {
-            this.exception = exception;
+            Exception = exception;
         }
 
+        public Exception Exception { get; set; }
         public ExceptionHandledAt HandledAt { get; set; }
+        public string Message { get; set; }
+        public LogLevel SeverityLevel { get; set; }
+    }
+
+    internal class TraceTelemetry : Telemetry
+    {
+        public TraceTelemetry(string message, LogLevel logLevel)
+        {
+            Message = message;
+            LogLevel = logLevel;
+        }
+
+        public LogLevel LogLevel { get; }
+        public string Message { get; }
     }
 }

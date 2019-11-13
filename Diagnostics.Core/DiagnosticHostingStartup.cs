@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 [assembly: HostingStartup(typeof(DiagnosticHostingStartup))]
 
@@ -21,17 +22,27 @@ namespace Diagnostics.Core
 {
     internal class DiagnosticHostingStartup : IHostingStartup
     {
+        internal static AspNetCoreMajorVersion AspNetCoreVersion;
+
         public void Configure(IWebHostBuilder builder)
         {
+            // Resolve the ASP.NET Core version
+            var informationalVersion = typeof(IWebHostBuilder).Assembly.GetCustomAttributes<AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion;
+            AspNetCoreVersion = (AspNetCoreMajorVersion)int.Parse((informationalVersion ?? "1.0.0").Split('.')[0]);
+
             builder.ConfigureServices(services =>
             {
                 services.AddHostedService<DiagnosticsHosted>();
 
-                services.AddLogging(b =>
+                // 3.0 and up we'll use the built in LoggingEventSource
+                if (AspNetCoreVersion < AspNetCoreMajorVersion.Three)
                 {
-                    // Add a logger provider to capture logs
-                    b.AddProvider(new DiagnosticLoggerProvider());
-                });
+                    services.AddLogging(b =>
+                    {
+                        // Add a logger provider to capture logs
+                        b.Services.AddSingleton<ILoggerProvider, ApplicationInsightsLoggerProvider>();
+                    });
+                }
             });
         }
     }
@@ -44,12 +55,10 @@ namespace Diagnostics.Core
         public DiagnosticsHosted(DiagnosticListener diagnosticListener)
         {
             _diagnosticListener = diagnosticListener;
-            // Resolve the ASP.NET Core version
-            var aspNetCoreVersion = (AspNetCoreMajorVersion)int.Parse((typeof(IWebHostBuilder).GetType().Assembly.GetCustomAttributes<AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion ?? "1.0.0").Split('.')[0]);
 
             var client = new TelemetryClient();
             var applicationIdProvider = new ApplicationIdProvider();
-            _hostingDiagnosticListener = new HostingDiagnosticListener(client, applicationIdProvider, injectResponseHeaders: false, trackExceptions: true, enableW3CHeaders: false, aspNetCoreVersion);
+            _hostingDiagnosticListener = new HostingDiagnosticListener(client, applicationIdProvider, injectResponseHeaders: false, trackExceptions: true, enableW3CHeaders: false, DiagnosticHostingStartup.AspNetCoreVersion);
         }
 
         public void Dispose()
